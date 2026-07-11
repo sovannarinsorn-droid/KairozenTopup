@@ -1,0 +1,1189 @@
+{
+  "freefire": {
+    "name": "Free Fire (SG/MY)",
+    "icon": "🔥",
+    "needs_server": false,
+    "id_label": "Player ID",
+    "note": "✅ តម្លៃ + product code ពិតពី Bay2Game (server SG/MY)។ price_usd = wholesale cost (មិនទាន់បូក markup)។ featured items បង្ហាញក្នុង bot menu។",
+    "packages": [
+      {
+        "code": "ff_25",
+        "label": "25 💎 Diamonds",
+        "price_usd": 0.24,
+        "cost_usd": 0.24,
+        "bay2game_product_code": "FREEFIRE_SGMY_25",
+        "featured": true
+      },
+      {
+        "code": "ff_100",
+        "label": "100 💎 Diamonds",
+        "price_usd": 0.85,
+        "cost_usd": 0.85,
+        "bay2game_product_code": "FREEFIRE_SGMY_100",
+        "featured": true
+      },
+      {
+        "code": "ff_310",
+        "label": "310 💎 Diamonds",
+        "price_usd": 2.6,
+        "cost_usd": 2.6,
+        "bay2game_product_code": "FREEFIRE_SGMY_310",
+        "featured": true
+      },
+      {
+        "code": "ff_520",
+        "label": "520 💎 Diamonds",
+        "price_usd": 4.33,
+        "cost_usd": 4.33,
+        "bay2game_product_code": "FREEFIRE_SGMY_520",
+        "featured": true
+      },
+      {
+        "code": "ff_1060",
+        "label": "1060 💎 Diamonds",
+        "price_usd": 8.5,
+        "cost_usd": 8.5,
+        "bay2game_product_code": "FREEFIRE_SGMY_1060",
+        "featured": true
+      },
+      {
+        "code": "ff_2180",
+        "label": "2180 💎 Diamonds",
+        "price_usd": 17.2,
+        "cost_usd": 17.2,
+        "bay2game_product_code": "FREEFIRE_SGMY_2180",
+        "featured": true
+      },
+      {
+        "code": "ff_5600",
+        "label": "5600 💎 Diamonds",
+        "price_usd": 42.6,
+        "cost_usd": 42.6,
+        "bay2game_product_code": "FREEFIRE_SGMY_5600",
+        "featured": true
+      },
+      {
+        "code": "ff_11500",
+        "label": "11500 💎 Diamonds",
+        "price_usd": 87.9,
+        "cost_usd": 87.9,
+        "bay2game_product_code": "FREEFIRE_SGMY_11500",
+        "featured": true
+      },
+      {
+        "code": "ff_weeklylite",
+        "label": "Weekly Lite Membership",
+        "price_usd": 0.32,
+        "cost_usd": 0.32,
+        "bay2game_product_code": "FREEFIRE_SGMY_WeeklyLite",
+        "featured": true
+      },
+      {
+        "code": "ff_weekly",
+        "label": "Weekly Membership",
+        "price_usd": 1.47,
+        "cost_usd": 1.47,
+        "bay2game_product_code": "FREEFIRE_SGMY_Weekly",
+        "featured": true
+      },
+      {
+        "code": "ff_monthly",
+        "label": "Monthly Membership",
+        "price_usd": 7.33,
+        "cost_usd": 7.33,
+        "bay2game_product_code": "FREEFIRE_SGMY_Monthly",
+        "featured": true
+      },
+      {
+        "code": "ff_lvl6",
+        "label": "Level Up Package - Level 6",
+        "price_usd": 0.27,
+        "cost_usd": 0.27,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_6",
+        "featured": false
+      },
+      {
+        "code": "ff_lvl10",
+        "label": "Level Up Package - Level 10",
+        "price_usd": 0.58,
+        "cost_usd": 0.58,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_10",
+        "featured": false
+      },
+      {
+        "code": "ff_lvl15",
+        "label": "Level Up Package - Level 15",
+        "price_usd": 0.59,
+        "cost_usd": 0.59,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_15",
+        "featured": false
+      },
+      {
+        "code": "ff_lvl20",
+        "label": "Level Up Package - Level 20",
+        "price_usd": 0.58,
+        "cost_usd": 0.58,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_20",
+        "featured": false
+      },
+      {
+        "code": "ff_lvl25",
+        "label": "Level Up Package - Level 25",
+        "price_usd": 0.58,
+        "cost_usd": 0.58,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_25",
+        "featured": false
+      },
+      {
+        "code": "ff_lvl30",
+        "label": "Level Up Package - Level 30",
+        "price_usd": 0.87,
+        "cost_usd": 0.87,
+        "bay2game_product_code": "FREEFIRE_SGMY_Level_Up_Package___Level_30",
+        "featured": false
+      }
+    ]
+  },
+  "mobilelegends": {
+    "name": "Mobile Legends",
+    "icon": "⚔️",
+    "needs_server": true,
+    "id_label": "User ID",
+    "note": "✅ តម្លៃ + product code ពិតពី Bay2Game។ price_usd = wholesale cost បច្ចុប្បន្ន (មិនទាន់បូក markup)។ មានកញ្ចប់សរុប 105 ប៉ុន្តែបង្ហាញក្នុង bot តែ featured ប៉ុណ្ណោះ — admin អាចប្តូរបានក្នុង products.json",
+    "packages": [
+      {
+        "code": "mlbb_55",
+        "label": "55 💎",
+        "price_usd": 0.76,
+        "cost_usd": 0.76,
+        "bay2game_product_code": "MLBB_55",
+        "featured": true
+      },
+      {
+        "code": "mlbb_weekly_elite_pack",
+        "label": "Weekly Elite Pack",
+        "price_usd": 0.78,
+        "cost_usd": 0.78,
+        "bay2game_product_code": "MLBB_Weekly_Elite_Pack",
+        "featured": true
+      },
+      {
+        "code": "mlbb_86",
+        "label": "86 💎",
+        "price_usd": 1.2,
+        "cost_usd": 1.2,
+        "bay2game_product_code": "MLBB_86",
+        "featured": true
+      },
+      {
+        "code": "mlbb_weekly",
+        "label": "Weekly",
+        "price_usd": 1.49,
+        "cost_usd": 1.49,
+        "bay2game_product_code": "MLBB_Weekly",
+        "featured": true
+      },
+      {
+        "code": "mlbb_165",
+        "label": "165 💎",
+        "price_usd": 2.29,
+        "cost_usd": 2.29,
+        "bay2game_product_code": "MLBB_165",
+        "featured": false
+      },
+      {
+        "code": "mlbb_172",
+        "label": "172 💎",
+        "price_usd": 2.38,
+        "cost_usd": 2.38,
+        "bay2game_product_code": "MLBB_172",
+        "featured": true
+      },
+      {
+        "code": "mlbb_257",
+        "label": "257 💎",
+        "price_usd": 3.41,
+        "cost_usd": 3.41,
+        "bay2game_product_code": "MLBB_257",
+        "featured": true
+      },
+      {
+        "code": "mlbb_275",
+        "label": "275 💎",
+        "price_usd": 3.66,
+        "cost_usd": 3.66,
+        "bay2game_product_code": "MLBB_275",
+        "featured": false
+      },
+      {
+        "code": "mlbb_monthly_elite_pack",
+        "label": "Monthly Elite Pack",
+        "price_usd": 3.85,
+        "cost_usd": 3.85,
+        "bay2game_product_code": "MLBB_Monthly_Elite_Pack",
+        "featured": true
+      },
+      {
+        "code": "mlbb_343",
+        "label": "343 💎",
+        "price_usd": 4.62,
+        "cost_usd": 4.62,
+        "bay2game_product_code": "MLBB_343",
+        "featured": true
+      },
+      {
+        "code": "mlbb_344",
+        "label": "344 💎",
+        "price_usd": 4.76,
+        "cost_usd": 4.76,
+        "bay2game_product_code": "MLBB_344",
+        "featured": false
+      },
+      {
+        "code": "mlbb_429",
+        "label": "429 💎",
+        "price_usd": 5.8,
+        "cost_usd": 5.8,
+        "bay2game_product_code": "MLBB_429",
+        "featured": true
+      },
+      {
+        "code": "mlbb_430",
+        "label": "430 💎",
+        "price_usd": 5.97,
+        "cost_usd": 5.97,
+        "bay2game_product_code": "MLBB_430",
+        "featured": false
+      },
+      {
+        "code": "mlbb_514",
+        "label": "514 💎",
+        "price_usd": 6.84,
+        "cost_usd": 6.84,
+        "bay2game_product_code": "MLBB_514",
+        "featured": true
+      },
+      {
+        "code": "mlbb_516",
+        "label": "516 💎",
+        "price_usd": 7.14,
+        "cost_usd": 7.14,
+        "bay2game_product_code": "MLBB_516",
+        "featured": false
+      },
+      {
+        "code": "mlbb_565",
+        "label": "565 💎",
+        "price_usd": 7.51,
+        "cost_usd": 7.51,
+        "bay2game_product_code": "MLBB_565",
+        "featured": false
+      },
+      {
+        "code": "mlbb_twilight",
+        "label": "Twilight",
+        "price_usd": 7.85,
+        "cost_usd": 7.85,
+        "bay2game_product_code": "MLBB_Twilight",
+        "featured": true
+      },
+      {
+        "code": "mlbb_600",
+        "label": "600 💎",
+        "price_usd": 8.03,
+        "cost_usd": 8.03,
+        "bay2game_product_code": "MLBB_600",
+        "featured": false
+      },
+      {
+        "code": "mlbb_602",
+        "label": "602 💎",
+        "price_usd": 8.34,
+        "cost_usd": 8.34,
+        "bay2game_product_code": "MLBB_602",
+        "featured": false
+      },
+      {
+        "code": "mlbb_706",
+        "label": "706 💎",
+        "price_usd": 9.37,
+        "cost_usd": 9.37,
+        "bay2game_product_code": "MLBB_706",
+        "featured": true
+      },
+      {
+        "code": "mlbb_792",
+        "label": "792 💎",
+        "price_usd": 10.57,
+        "cost_usd": 10.57,
+        "bay2game_product_code": "MLBB_792",
+        "featured": false
+      },
+      {
+        "code": "mlbb_878",
+        "label": "878 💎",
+        "price_usd": 11.75,
+        "cost_usd": 11.75,
+        "bay2game_product_code": "MLBB_878",
+        "featured": true
+      },
+      {
+        "code": "mlbb_963",
+        "label": "963 💎",
+        "price_usd": 12.78,
+        "cost_usd": 12.78,
+        "bay2game_product_code": "MLBB_963",
+        "featured": false
+      },
+      {
+        "code": "mlbb_964",
+        "label": "964 💎",
+        "price_usd": 12.95,
+        "cost_usd": 12.95,
+        "bay2game_product_code": "MLBB_964",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1050",
+        "label": "1050 💎",
+        "price_usd": 14.13,
+        "cost_usd": 14.13,
+        "bay2game_product_code": "MLBB_1050",
+        "featured": true
+      },
+      {
+        "code": "mlbb_1060",
+        "label": "1060 💎",
+        "price_usd": 14.22,
+        "cost_usd": 14.22,
+        "bay2game_product_code": "MLBB_1060",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1136",
+        "label": "1136 💎",
+        "price_usd": 15.33,
+        "cost_usd": 15.33,
+        "bay2game_product_code": "MLBB_1136",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1222",
+        "label": "1222 💎",
+        "price_usd": 16.51,
+        "cost_usd": 16.51,
+        "bay2game_product_code": "MLBB_1222",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1308",
+        "label": "1308 💎",
+        "price_usd": 17.71,
+        "cost_usd": 17.71,
+        "bay2game_product_code": "MLBB_1308",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1412",
+        "label": "1412 💎",
+        "price_usd": 18.74,
+        "cost_usd": 18.74,
+        "bay2game_product_code": "MLBB_1412",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1498",
+        "label": "1498 💎",
+        "price_usd": 19.94,
+        "cost_usd": 19.94,
+        "bay2game_product_code": "MLBB_1498",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1584",
+        "label": "1584 💎",
+        "price_usd": 21.13,
+        "cost_usd": 21.13,
+        "bay2game_product_code": "MLBB_1584",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1670",
+        "label": "1670 💎",
+        "price_usd": 22.32,
+        "cost_usd": 22.32,
+        "bay2game_product_code": "MLBB_1670",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1756",
+        "label": "1756 💎",
+        "price_usd": 23.5,
+        "cost_usd": 23.5,
+        "bay2game_product_code": "MLBB_1756",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1842",
+        "label": "1842 💎",
+        "price_usd": 24.7,
+        "cost_usd": 24.7,
+        "bay2game_product_code": "MLBB_1842",
+        "featured": false
+      },
+      {
+        "code": "mlbb_1928",
+        "label": "1928 💎",
+        "price_usd": 25.88,
+        "cost_usd": 25.88,
+        "bay2game_product_code": "MLBB_1928",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2195",
+        "label": "2195 💎",
+        "price_usd": 28.36,
+        "cost_usd": 28.36,
+        "bay2game_product_code": "MLBB_2195",
+        "featured": true
+      },
+      {
+        "code": "mlbb_2281",
+        "label": "2281 💎",
+        "price_usd": 29.56,
+        "cost_usd": 29.56,
+        "bay2game_product_code": "MLBB_2281",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2367",
+        "label": "2367 💎",
+        "price_usd": 30.74,
+        "cost_usd": 30.74,
+        "bay2game_product_code": "MLBB_2367",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2453",
+        "label": "2453 💎",
+        "price_usd": 31.95,
+        "cost_usd": 31.95,
+        "bay2game_product_code": "MLBB_2453",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2539",
+        "label": "2539 💎",
+        "price_usd": 33.12,
+        "cost_usd": 33.12,
+        "bay2game_product_code": "MLBB_2539",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2625",
+        "label": "2625 💎",
+        "price_usd": 34.33,
+        "cost_usd": 34.33,
+        "bay2game_product_code": "MLBB_2625",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2711",
+        "label": "2711 💎",
+        "price_usd": 35.51,
+        "cost_usd": 35.51,
+        "bay2game_product_code": "MLBB_2711",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2797",
+        "label": "2797 💎",
+        "price_usd": 36.71,
+        "cost_usd": 36.71,
+        "bay2game_product_code": "MLBB_2797",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2901",
+        "label": "2901 💎",
+        "price_usd": 37.73,
+        "cost_usd": 37.73,
+        "bay2game_product_code": "MLBB_2901",
+        "featured": false
+      },
+      {
+        "code": "mlbb_2987",
+        "label": "2987 💎",
+        "price_usd": 38.93,
+        "cost_usd": 38.93,
+        "bay2game_product_code": "MLBB_2987",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3073",
+        "label": "3073 💎",
+        "price_usd": 40.11,
+        "cost_usd": 40.11,
+        "bay2game_product_code": "MLBB_3073",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3159",
+        "label": "3159 💎",
+        "price_usd": 41.31,
+        "cost_usd": 41.31,
+        "bay2game_product_code": "MLBB_3159",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3245",
+        "label": "3245 💎",
+        "price_usd": 42.49,
+        "cost_usd": 42.49,
+        "bay2game_product_code": "MLBB_3245",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3331",
+        "label": "3331 💎",
+        "price_usd": 43.69,
+        "cost_usd": 43.69,
+        "bay2game_product_code": "MLBB_3331",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3417",
+        "label": "3417 💎",
+        "price_usd": 44.87,
+        "cost_usd": 44.87,
+        "bay2game_product_code": "MLBB_3417",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3503",
+        "label": "3503 💎",
+        "price_usd": 46.07,
+        "cost_usd": 46.07,
+        "bay2game_product_code": "MLBB_3503",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3688",
+        "label": "3688 💎",
+        "price_usd": 47.31,
+        "cost_usd": 47.31,
+        "bay2game_product_code": "MLBB_3688",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3774",
+        "label": "3774 💎",
+        "price_usd": 48.51,
+        "cost_usd": 48.51,
+        "bay2game_product_code": "MLBB_3774",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3860",
+        "label": "3860 💎",
+        "price_usd": 49.69,
+        "cost_usd": 49.69,
+        "bay2game_product_code": "MLBB_3860",
+        "featured": false
+      },
+      {
+        "code": "mlbb_3946",
+        "label": "3946 💎",
+        "price_usd": 50.89,
+        "cost_usd": 50.89,
+        "bay2game_product_code": "MLBB_3946",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4032",
+        "label": "4032 💎",
+        "price_usd": 52.08,
+        "cost_usd": 52.08,
+        "bay2game_product_code": "MLBB_4032",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4118",
+        "label": "4118 💎",
+        "price_usd": 53.27,
+        "cost_usd": 53.27,
+        "bay2game_product_code": "MLBB_4118",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4204",
+        "label": "4204 💎",
+        "price_usd": 54.46,
+        "cost_usd": 54.46,
+        "bay2game_product_code": "MLBB_4204",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4290",
+        "label": "4290 💎",
+        "price_usd": 55.66,
+        "cost_usd": 55.66,
+        "bay2game_product_code": "MLBB_4290",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4394",
+        "label": "4394 💎",
+        "price_usd": 56.68,
+        "cost_usd": 56.68,
+        "bay2game_product_code": "MLBB_4394",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4480",
+        "label": "4480 💎",
+        "price_usd": 57.88,
+        "cost_usd": 57.88,
+        "bay2game_product_code": "MLBB_4480",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4566",
+        "label": "4566 💎",
+        "price_usd": 59.07,
+        "cost_usd": 59.07,
+        "bay2game_product_code": "MLBB_4566",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4652",
+        "label": "4652 💎",
+        "price_usd": 60.26,
+        "cost_usd": 60.26,
+        "bay2game_product_code": "MLBB_4652",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4738",
+        "label": "4738 💎",
+        "price_usd": 61.45,
+        "cost_usd": 61.45,
+        "bay2game_product_code": "MLBB_4738",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4824",
+        "label": "4824 💎",
+        "price_usd": 62.65,
+        "cost_usd": 62.65,
+        "bay2game_product_code": "MLBB_4824",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4910",
+        "label": "4910 💎",
+        "price_usd": 63.83,
+        "cost_usd": 63.83,
+        "bay2game_product_code": "MLBB_4910",
+        "featured": false
+      },
+      {
+        "code": "mlbb_4996",
+        "label": "4996 💎",
+        "price_usd": 65.03,
+        "cost_usd": 65.03,
+        "bay2game_product_code": "MLBB_4996",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5100",
+        "label": "5100 💎",
+        "price_usd": 66.05,
+        "cost_usd": 66.05,
+        "bay2game_product_code": "MLBB_5100",
+        "featured": true
+      },
+      {
+        "code": "mlbb_5186",
+        "label": "5186 💎",
+        "price_usd": 67.25,
+        "cost_usd": 67.25,
+        "bay2game_product_code": "MLBB_5186",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5272",
+        "label": "5272 💎",
+        "price_usd": 68.43,
+        "cost_usd": 68.43,
+        "bay2game_product_code": "MLBB_5272",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5358",
+        "label": "5358 💎",
+        "price_usd": 69.64,
+        "cost_usd": 69.64,
+        "bay2game_product_code": "MLBB_5358",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5444",
+        "label": "5444 💎",
+        "price_usd": 70.82,
+        "cost_usd": 70.82,
+        "bay2game_product_code": "MLBB_5444",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5532",
+        "label": "5532 💎",
+        "price_usd": 71.43,
+        "cost_usd": 71.43,
+        "bay2game_product_code": "MLBB_5532",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5618",
+        "label": "5618 💎",
+        "price_usd": 72.64,
+        "cost_usd": 72.64,
+        "bay2game_product_code": "MLBB_5618",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5704",
+        "label": "5704 💎",
+        "price_usd": 73.82,
+        "cost_usd": 73.82,
+        "bay2game_product_code": "MLBB_5704",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5790",
+        "label": "5790 💎",
+        "price_usd": 75.02,
+        "cost_usd": 75.02,
+        "bay2game_product_code": "MLBB_5790",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5876",
+        "label": "5876 💎",
+        "price_usd": 76.2,
+        "cost_usd": 76.2,
+        "bay2game_product_code": "MLBB_5876",
+        "featured": false
+      },
+      {
+        "code": "mlbb_5962",
+        "label": "5962 💎",
+        "price_usd": 77.4,
+        "cost_usd": 77.4,
+        "bay2game_product_code": "MLBB_5962",
+        "featured": false
+      },
+      {
+        "code": "mlbb_6048",
+        "label": "6048 💎",
+        "price_usd": 78.59,
+        "cost_usd": 78.59,
+        "bay2game_product_code": "MLBB_6048",
+        "featured": false
+      },
+      {
+        "code": "mlbb_6134",
+        "label": "6134 💎",
+        "price_usd": 79.79,
+        "cost_usd": 79.79,
+        "bay2game_product_code": "MLBB_6134",
+        "featured": false
+      },
+      {
+        "code": "mlbb_6238",
+        "label": "6238 💎",
+        "price_usd": 80.81,
+        "cost_usd": 80.81,
+        "bay2game_product_code": "MLBB_6238",
+        "featured": false
+      },
+      {
+        "code": "mlbb_6754",
+        "label": "6754 💎",
+        "price_usd": 87.95,
+        "cost_usd": 87.95,
+        "bay2game_product_code": "MLBB_6754",
+        "featured": false
+      },
+      {
+        "code": "mlbb_6944",
+        "label": "6944 💎",
+        "price_usd": 90.18,
+        "cost_usd": 90.18,
+        "bay2game_product_code": "MLBB_6944",
+        "featured": false
+      },
+      {
+        "code": "mlbb_7727",
+        "label": "7727 💎",
+        "price_usd": 99.79,
+        "cost_usd": 99.79,
+        "bay2game_product_code": "MLBB_7727",
+        "featured": false
+      },
+      {
+        "code": "mlbb_8433",
+        "label": "8433 💎",
+        "price_usd": 109.16,
+        "cost_usd": 109.16,
+        "bay2game_product_code": "MLBB_8433",
+        "featured": false
+      },
+      {
+        "code": "mlbb_9288",
+        "label": "9288 💎",
+        "price_usd": 118.65,
+        "cost_usd": 118.65,
+        "bay2game_product_code": "MLBB_9288",
+        "featured": false
+      },
+      {
+        "code": "mlbb_9994",
+        "label": "9994 💎",
+        "price_usd": 128.02,
+        "cost_usd": 128.02,
+        "bay2game_product_code": "MLBB_9994",
+        "featured": false
+      },
+      {
+        "code": "mlbb_10080",
+        "label": "10080 💎",
+        "price_usd": 129.22,
+        "cost_usd": 129.22,
+        "bay2game_product_code": "MLBB_10080",
+        "featured": false
+      },
+      {
+        "code": "mlbb_10700",
+        "label": "10700 💎",
+        "price_usd": 137.39,
+        "cost_usd": 137.39,
+        "bay2game_product_code": "MLBB_10700",
+        "featured": false
+      },
+      {
+        "code": "mlbb_11483",
+        "label": "11483 💎",
+        "price_usd": 147.02,
+        "cost_usd": 147.02,
+        "bay2game_product_code": "MLBB_11483",
+        "featured": false
+      },
+      {
+        "code": "mlbb_12189",
+        "label": "12189 💎",
+        "price_usd": 156.38,
+        "cost_usd": 156.38,
+        "bay2game_product_code": "MLBB_12189",
+        "featured": false
+      },
+      {
+        "code": "mlbb_12976",
+        "label": "12976 💎",
+        "price_usd": 165.97,
+        "cost_usd": 165.97,
+        "bay2game_product_code": "MLBB_12976",
+        "featured": false
+      },
+      {
+        "code": "mlbb_13682",
+        "label": "13682 💎",
+        "price_usd": 175.34,
+        "cost_usd": 175.34,
+        "bay2game_product_code": "MLBB_13682",
+        "featured": false
+      },
+      {
+        "code": "mlbb_14820",
+        "label": "14820 💎",
+        "price_usd": 190.09,
+        "cost_usd": 190.09,
+        "bay2game_product_code": "MLBB_14820",
+        "featured": false
+      },
+      {
+        "code": "mlbb_15526",
+        "label": "15526 💎",
+        "price_usd": 199.47,
+        "cost_usd": 199.47,
+        "bay2game_product_code": "MLBB_15526",
+        "featured": false
+      },
+      {
+        "code": "mlbb_18576",
+        "label": "18576 💎",
+        "price_usd": 237.3,
+        "cost_usd": 237.3,
+        "bay2game_product_code": "MLBB_18576",
+        "featured": false
+      },
+      {
+        "code": "mlbb_19282",
+        "label": "19282 💎",
+        "price_usd": 246.68,
+        "cost_usd": 246.68,
+        "bay2game_product_code": "MLBB_19282",
+        "featured": false
+      },
+      {
+        "code": "mlbb_19626",
+        "label": "19626 💎",
+        "price_usd": 251.43,
+        "cost_usd": 251.43,
+        "bay2game_product_code": "MLBB_19626",
+        "featured": false
+      },
+      {
+        "code": "mlbb_20771",
+        "label": "20771 💎",
+        "price_usd": 265.67,
+        "cost_usd": 265.67,
+        "bay2game_product_code": "MLBB_20771",
+        "featured": false
+      },
+      {
+        "code": "mlbb_27864",
+        "label": "27864 💎",
+        "price_usd": 355.96,
+        "cost_usd": 355.96,
+        "bay2game_product_code": "MLBB_27864",
+        "featured": false
+      },
+      {
+        "code": "mlbb_37152",
+        "label": "37152 💎",
+        "price_usd": 474.62,
+        "cost_usd": 474.62,
+        "bay2game_product_code": "MLBB_37152",
+        "featured": false
+      },
+      {
+        "code": "mlbb_46440",
+        "label": "46440 💎",
+        "price_usd": 593.27,
+        "cost_usd": 593.27,
+        "bay2game_product_code": "MLBB_46440",
+        "featured": false
+      },
+      {
+        "code": "mlbb_55728",
+        "label": "55728 💎",
+        "price_usd": 711.91,
+        "cost_usd": 711.91,
+        "bay2game_product_code": "MLBB_55728",
+        "featured": false
+      },
+      {
+        "code": "mlbb_65016",
+        "label": "65016 💎",
+        "price_usd": 830.57,
+        "cost_usd": 830.57,
+        "bay2game_product_code": "MLBB_65016",
+        "featured": false
+      }
+    ]
+  },
+  "pubgm": {
+    "name": "PUBG Mobile",
+    "icon": "🎯",
+    "needs_server": false,
+    "id_label": "Character ID",
+    "note": "✅ តម្លៃ + product code ពិតពី Bay2Game។ price_usd = wholesale cost បច្ចុប្បន្ន (មិនទាន់បូក markup)។ featured items បង្ហាញក្នុង bot menu — admin អាចប្តូរបានក្នុង products.json",
+    "packages": [
+      {
+        "code": "pubgm_first_purchase_pack",
+        "label": "First Purchase Pack",
+        "price_usd": 0.84,
+        "cost_usd": 0.84,
+        "bay2game_product_code": "PUBGM_First_Purchase_Pack",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_1_month",
+        "label": "Prime (1 Month)",
+        "price_usd": 0.84,
+        "cost_usd": 0.84,
+        "bay2game_product_code": "PUBGM_Prime_1_Month",
+        "featured": true
+      },
+      {
+        "code": "pubgm_weekly_deal_pack_1",
+        "label": "Weekly Deal Pack 1",
+        "price_usd": 0.84,
+        "cost_usd": 0.84,
+        "bay2game_product_code": "PUBGM_Weekly_Deal_Pack_1",
+        "featured": false
+      },
+      {
+        "code": "pubgm_60",
+        "label": "60 UC",
+        "price_usd": 0.88,
+        "cost_usd": 0.88,
+        "bay2game_product_code": "PUBGM_60",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_3_months",
+        "label": "Prime (3 Months)",
+        "price_usd": 2.52,
+        "cost_usd": 2.52,
+        "bay2game_product_code": "PUBGM_Prime_3_Months",
+        "featured": false
+      },
+      {
+        "code": "pubgm_upgradable_firearm_materials_pack",
+        "label": "Upgradable Firearm Materials Pack",
+        "price_usd": 2.52,
+        "cost_usd": 2.52,
+        "bay2game_product_code": "PUBGM_Upgradable_Firearm_Materials_Pack",
+        "featured": false
+      },
+      {
+        "code": "pubgm_weekly_deal_pack_2",
+        "label": "Weekly Deal Pack 2",
+        "price_usd": 2.56,
+        "cost_usd": 2.56,
+        "bay2game_product_code": "PUBGM_Weekly_Deal_Pack_2",
+        "featured": false
+      },
+      {
+        "code": "pubgm_weekly_mythic_emblem_value_pack",
+        "label": "Weekly Mythic Emblem Value Pack",
+        "price_usd": 2.56,
+        "cost_usd": 2.56,
+        "bay2game_product_code": "PUBGM_Weekly_Mythic_Emblem_Value_Pack",
+        "featured": false
+      },
+      {
+        "code": "pubgm_mythic_emblem_pack",
+        "label": "Mythic Emblem Pack",
+        "price_usd": 4.19,
+        "cost_usd": 4.19,
+        "bay2game_product_code": "PUBGM_Mythic_Emblem_Pack",
+        "featured": false
+      },
+      {
+        "code": "pubgm_325",
+        "label": "325 UC",
+        "price_usd": 4.49,
+        "cost_usd": 4.49,
+        "bay2game_product_code": "PUBGM_325",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_6_months",
+        "label": "Prime (6 Months)",
+        "price_usd": 5.04,
+        "cost_usd": 5.04,
+        "bay2game_product_code": "PUBGM_Prime_6_Months",
+        "featured": false
+      },
+      {
+        "code": "pubgm_elite_pass_lv1_50",
+        "label": "Elite Pass LV1-50",
+        "price_usd": 5.13,
+        "cost_usd": 5.13,
+        "bay2game_product_code": "PUBGM_Elite_Pass_LV1_50",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_plus_1_month",
+        "label": "Prime Plus (1 Month)",
+        "price_usd": 8.39,
+        "cost_usd": 8.39,
+        "bay2game_product_code": "PUBGM_Prime_Plus_1_Month",
+        "featured": true
+      },
+      {
+        "code": "pubgm_660",
+        "label": "660 UC",
+        "price_usd": 8.99,
+        "cost_usd": 8.99,
+        "bay2game_product_code": "PUBGM_660",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_12_months",
+        "label": "Prime (12 Months)",
+        "price_usd": 10.06,
+        "cost_usd": 10.06,
+        "bay2game_product_code": "PUBGM_Prime_12_Months",
+        "featured": false
+      },
+      {
+        "code": "pubgm_elite_pass_lv1_100",
+        "label": "Elite Pass LV1-100",
+        "price_usd": 10.26,
+        "cost_usd": 10.26,
+        "bay2game_product_code": "PUBGM_Elite_Pass_LV1_100",
+        "featured": true
+      },
+      {
+        "code": "pubgm_1800",
+        "label": "1800 UC",
+        "price_usd": 22.47,
+        "cost_usd": 22.47,
+        "bay2game_product_code": "PUBGM_1800",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_plus_3_months",
+        "label": "Prime Plus (3 Months)",
+        "price_usd": 25.16,
+        "cost_usd": 25.16,
+        "bay2game_product_code": "PUBGM_Prime_Plus_3_Months",
+        "featured": false
+      },
+      {
+        "code": "pubgm_elite_pass_plus_lv1_100",
+        "label": "Elite Pass Plus LV1-100",
+        "price_usd": 25.66,
+        "cost_usd": 25.66,
+        "bay2game_product_code": "PUBGM_Elite_Pass_Plus_LV1_100",
+        "featured": true
+      },
+      {
+        "code": "pubgm_3850",
+        "label": "3850 UC",
+        "price_usd": 44.94,
+        "cost_usd": 44.94,
+        "bay2game_product_code": "PUBGM_3850",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_plus_6_months",
+        "label": "Prime Plus (6 Months)",
+        "price_usd": 50.32,
+        "cost_usd": 50.32,
+        "bay2game_product_code": "PUBGM_Prime_Plus_6_Months",
+        "featured": false
+      },
+      {
+        "code": "pubgm_8100",
+        "label": "8100 UC",
+        "price_usd": 89.9,
+        "cost_usd": 89.9,
+        "bay2game_product_code": "PUBGM_8100",
+        "featured": true
+      },
+      {
+        "code": "pubgm_prime_plus_12_months",
+        "label": "Prime Plus (12 Months)",
+        "price_usd": 100.64,
+        "cost_usd": 100.64,
+        "bay2game_product_code": "PUBGM_Prime_Plus_12_Months",
+        "featured": false
+      }
+    ]
+  }
+}
