@@ -18,6 +18,7 @@ Run:
 """
 
 import os
+import io
 import json
 import time
 import uuid
@@ -25,6 +26,8 @@ import logging
 import threading
 
 import requests
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 from flask import Flask
 from telegram import (
     Update, InlineKeyboardButton, InlineKeyboardMarkup,
@@ -49,22 +52,36 @@ log = logging.getLogger("topup_bot")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "PUT_YOUR_TELEGRAM_BOT_TOKEN_HERE")
 
 ADMIN_IDS = [
-    8266854899,  # <-- ដូរជា Telegram user id របស់ Admin
+    123456789,  # <-- ដូរជា Telegram user id របស់ Admin
 ]
 
-# --- Bay2Game.com (ប្រភពតម្លៃ Diamond + ការបញ្ជូន Topup) ---
-BAY2GAME_BASE_URL = os.getenv("BAY2GAME_BASE_URL", "https://bay2game.com/api")
+# --- Bay2Game.xyz (ប្រភពតម្លៃ Diamond + ការបញ្ជូន Topup) ---
+# API Docs ពិត៖ https://bay2game.xyz/developer_docs/
+# យក API key ពី Telegram @Bay2GameBot ដោយប្រើ command /profile
+BAY2GAME_BASE_URL = os.getenv("BAY2GAME_BASE_URL", "https://api.bay2game.xyz/api")
 BAY2GAME_API_KEY = os.getenv("BAY2GAME_API_KEY", "PUT_BAY2GAME_API_KEY_HERE")
-BAY2GAME_CATALOG_ENDPOINT = "/products"
-BAY2GAME_ORDER_ENDPOINT = "/order"          # ដាក់ Order Topup ពិតប្រាកដ
-BAY2GAME_STATUS_ENDPOINT = "/order/status"  # ពិនិត្យស្ថានភាព Topup (delivered/failed)
+BAY2GAME_CATEGORIES_ENDPOINT = "/categories"   # បញ្ជីហ្គេមទាំងអស់ (game_code)
+BAY2GAME_PRODUCTS_ENDPOINT = "/products"       # បញ្ជីកញ្ចប់តាមហ្គេម (?game_code=...)
+BAY2GAME_ORDER_ENDPOINT = "/create_order"      # ដាក់ Order Topup ពិតប្រាកដ (GET request, ឆ្លើយតបភ្លាមៗ)
+BAY2GAME_PROFILE_ENDPOINT = "/profile"         # ពិនិត្យសមតុល្យគណនី Bay2Game
+BAY2GAME_ORDER_HISTORY_ENDPOINT = "/order_history"
 
-# --- CamRapidPay / CamRapidX (KHQR) ---
-CAMRAPID_BASE_URL = os.getenv("CAMRAPID_BASE_URL", "https://api.camrapidpay.com")
+# Bay2Game sell_price ត្រូវបានផ្តល់ជា USD — bot បម្លែងទៅ ៛ ដោយស្វ័យប្រវត្តិសម្រាប់តម្លៃដើម
+# (Admin នៅតែអាចកំណត់តម្លៃលក់ពិតប្រាកដឡើងវិញតាម Admin Panel ជា ៛ ដដែល)
+USD_TO_KHR_RATE = float(os.getenv("USD_TO_KHR_RATE", "4100"))
+
+# --- CamRapidPay (KHQR) ---
+# API Docs (JS-rendered, ត្រូវ login មើល)៖ https://docs.camrapidpay.com/
+# ស្នើ API key តាម Telegram @CamRapidSecureSupport
+# Endpoint ពិតៗខាងក្រោមយកពី bot ដែលដំណើរការស្រាប់ (phanna_premium_bot_V6_premium.py)
 CAMRAPID_API_KEY = os.getenv("CAMRAPID_API_KEY", "PUT_CAMRAPIDPAY_API_KEY_HERE")
-CAMRAPID_MERCHANT_ID = os.getenv("CAMRAPID_MERCHANT_ID", "PUT_MERCHANT_ID_HERE")
-CAMRAPID_CREATE_QR_ENDPOINT = "/khqr/create"
-CAMRAPID_CHECK_PAYMENT_ENDPOINT = "/khqr/check"
+CAMRAPID_CREATE_URL = os.getenv("CAMRAPID_CREATE_URL", "https://pay.camrapidpay.com/api/v1/khqr/create-payments")
+CAMRAPID_CHECK_URL = os.getenv("CAMRAPID_CHECK_URL", "https://pay.camrapidpay.com/check-transaction-api")
+# ស្រេចចិត្ត៖ webhook URL គ្រឹះ (បើគ្មាន public domain នៅឡើយ បន្សល់ទុកទទេ — bot polling នៅតែដំណើរការធម្មតា)
+CAMRAPID_WEBHOOK_BASE = os.getenv("CAMRAPID_WEBHOOK_BASE", "")
+
+# --- ឈ្មោះហាង (បង្ហាញលើ QR Card) ---
+STORE_NAME = "Kairozen TopUp"
 
 # --- Auto-payment polling ---
 PAYMENT_POLL_INTERVAL_SECONDS = 5       # ថេរវេលារវាងការពិនិត្យនីមួយៗ
@@ -77,10 +94,11 @@ RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL", "")
 SELF_PING_INTERVAL_SECONDS = 10 * 60  # ping ខ្លួនឯងរាល់ 10 នាទី កុំឲ្យ Render free tier គេង
 
 # --- ហ្គេមដែលគាំទ្រ ---
+# key = game_code ពិតប្រាកដពី Bay2Game /categories endpoint (ត្រូវតែដូចគ្នាបេះបិទ ដើម្បីហៅ /products ត្រូវបាន)
 GAMES = {
-    "mlbb":  {"name": "Mobile Legends: Bang Bang", "emoji": "🎮", "fields": ["User ID", "Zone ID"]},
-    "ff":    {"name": "Free Fire",                 "emoji": "🔥", "fields": ["Player ID"]},
-    "pubgm": {"name": "PUBG Mobile",               "emoji": "🪖", "fields": ["Player ID"]},
+    "mlbb_exclusive": {"name": "Mobile Legends: Bang Bang", "emoji": "🎮", "fields": ["User ID", "Zone ID"]},
+    "freefire_sgmy":  {"name": "Free Fire",                 "emoji": "🔥", "fields": ["Player ID"]},
+    "pubg_mobile":    {"name": "PUBG Mobile",               "emoji": "🪖", "fields": ["Player ID"]},
 }
 
 # ============================================================
@@ -241,35 +259,60 @@ def save_json(path, data):
 _last_fetch_time = 0
 
 
-def fetch_catalog_from_api():
+def fetch_products_for_game(game_code: str):
     """
-    TODO: កែ mapping ខាងក្រោមឲ្យត្រូវនឹង response ពិតរបស់ Bay2Game.com
-    សន្មតថា response = {"data": [{"game": "mlbb", "code": "...", "name": "...", "price": 2500}, ...]}
+    ហៅ GET /api/products?api_key=...&game_code=...
+    Response ពិត៖
+    {"status":"SUCCESS","game":{...},"products":[
+        {"id":1,"product_code":"MLBB_100","name":"100 Diamonds","sell_price":1.5,"status":"active"}, ...
+    ]}
+    sell_price គឺជា USD។
     """
-    url = f"{BAY2GAME_BASE_URL}{BAY2GAME_CATALOG_ENDPOINT}"
-    headers = {"Authorization": f"Bearer {BAY2GAME_API_KEY}"}
-    try:
-        resp = requests.get(url, headers=headers, timeout=15)
-        resp.raise_for_status()
-        raw = resp.json()
-    except Exception as e:
-        log.warning(f"Bay2Game API fetch failed: {e}. Using cached catalog.json")
-        return load_json(CATALOG_FILE, default={})
+    url = f"{BAY2GAME_BASE_URL}{BAY2GAME_PRODUCTS_ENDPOINT}"
+    params = {"api_key": BAY2GAME_API_KEY, "game_code": game_code}
+    resp = requests.get(url, params=params, headers={"Accept": "application/json"}, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    if data.get("status") != "SUCCESS":
+        log.warning(f"Bay2Game /products ({game_code}) status != SUCCESS: {data}")
+        return []
 
-    catalog = {}
-    for item in raw.get("data", []):
-        game = item.get("game")
-        if game not in GAMES:
-            continue
-        catalog.setdefault(game, []).append({
-            "code": item.get("code"),
+    products = []
+    for item in data.get("products", []):
+        if item.get("status") not in (None, "active"):
+            continue  # រំលងកញ្ចប់ដែលបិទ/អស់ស្តុក
+        cost_usd = float(item.get("sell_price", 0))
+        products.append({
+            "code": item.get("product_code"),
             "label": item.get("name"),
-            "cost": float(item.get("price", 0)),
+            "cost_usd": cost_usd,
+            "cost": round(cost_usd * USD_TO_KHR_RATE),  # តម្លៃដើមប្តូរជា ៛ (admin អាច override)
         })
+    return products
+
+
+def fetch_catalog_from_api():
+    """ទាញកញ្ចប់ Diamond ពិតប្រាកដពី Bay2Game.xyz សម្រាប់ហ្គេមទាំងអស់ក្នុង GAMES"""
+    catalog = {}
+    any_success = False
+    for game_code in GAMES:
+        try:
+            products = fetch_products_for_game(game_code)
+            any_success = True
+            if products:
+                catalog[game_code] = products
+        except Exception as e:
+            log.warning(f"Bay2Game API fetch failed for {game_code}: {e}.")
+
+    if not any_success:
+        # បរាជ័យទាំងអស់ (ឧ. គ្មាន internet, API key ខុស) — ប្រើ cache ចាស់
+        log.warning("Bay2Game API unreachable for all games. Using cached catalog.json")
+        return load_json(CATALOG_FILE, default={})
 
     if catalog:
         save_json(CATALOG_FILE, catalog)
-    return catalog or load_json(CATALOG_FILE, default={})
+        return catalog
+    return load_json(CATALOG_FILE, default={})
 
 
 def get_catalog(force_refresh=False):
@@ -311,43 +354,289 @@ def set_price_override(game_key, package_code, new_price):
 # ============================================================
 
 
-def create_khqr(order_id, amount, currency="KHR"):
-    """TODO: កែតាម API spec ពិតរបស់ CamRapidPay/CamRapidX"""
-    url = f"{CAMRAPID_BASE_URL}{CAMRAPID_CREATE_QR_ENDPOINT}"
-    headers = {"Authorization": f"Bearer {CAMRAPID_API_KEY}", "Content-Type": "application/json"}
+_camrapid_http = requests.Session()
+_camrapid_http.mount("https://", requests.adapters.HTTPAdapter(
+    max_retries=requests.adapters.Retry(total=2, backoff_factor=0.5)
+))
+
+
+def create_khqr(order_id, amount_khr, currency="KHR"):
+    """
+    ហៅ POST /api/v1/khqr/create-payments ពិតប្រាកដរបស់ CamRapidPay។
+    ⚠️ CamRapidPay គិត amount ជា USD (មិនមែន ៛ ទេ) — bot.py នេះលក់តម្លៃជា ៛
+    ដូច្នេះត្រូវបម្លែង ៛ → USD ដោយប្រើ USD_TO_KHR_RATE ជាមុនសិន។
+    Return: {"success", "qr_string", "amount_usd", "expires_in", "error"}
+    """
+    amount_usd = round(float(amount_khr) / USD_TO_KHR_RATE, 2)
     payload = {
-        "merchant_id": CAMRAPID_MERCHANT_ID,
-        "order_id": order_id,
-        "amount": amount,
-        "currency": currency,
+        "api_key": CAMRAPID_API_KEY,
+        "amount": amount_usd,
+        "reference": order_id,
     }
+    if CAMRAPID_WEBHOOK_BASE:
+        payload["webhook_url"] = f"{CAMRAPID_WEBHOOK_BASE}/wh/{order_id}"
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=15)
-        resp.raise_for_status()
+        resp = _camrapid_http.post(
+            CAMRAPID_CREATE_URL, json=payload,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            timeout=15,
+        )
         data = resp.json()
-        return {
-            "success": True,
-            "qr_string": data.get("qr_string", ""),
-            "qr_image_url": data.get("qr_image_url", ""),
-            "md5": data.get("md5", ""),
-        }
+        if data.get("success"):
+            return {
+                "success": True,
+                "qr_string": data.get("qr_code", ""),
+                "payment_url": data.get("payment_url", ""),
+                "amount_usd": amount_usd,
+                "expires_in": data.get("expires_in"),
+            }
+        log.warning(f"create_khqr failed: {data}")
+        return {"success": False, "error": data.get("message", "Unknown error")}
     except Exception as e:
-        log.error(f"create_khqr failed: {e}")
+        log.error(f"create_khqr error: {e}")
         return {"success": False, "error": str(e)}
 
 
 def check_payment(order_id, md5=""):
-    url = f"{CAMRAPID_BASE_URL}{CAMRAPID_CHECK_PAYMENT_ENDPOINT}"
-    headers = {"Authorization": f"Bearer {CAMRAPID_API_KEY}"}
-    params = {"order_id": order_id, "md5": md5}
+    """ហៅ GET /check-transaction-api?api_key=...&reference=... (មិនប្រើ md5 ទេ — ប្រើ reference ជំនួស)"""
     try:
-        resp = requests.get(url, headers=headers, params=params, timeout=10)
-        resp.raise_for_status()
-        status = resp.json().get("status", "pending")
-        return {"paid": status.lower() in ("paid", "success", "completed"), "status": status}
+        resp = _camrapid_http.get(
+            CAMRAPID_CHECK_URL,
+            params={"api_key": CAMRAPID_API_KEY, "reference": order_id},
+            headers={"Accept": "application/json"},
+            timeout=10,
+        )
+        data = resp.json()
+        status = str(data.get("status", "pending"))
+        paid = bool(data.get("success")) and status.lower() in ("success", "paid", "completed")
+        return {"paid": paid, "status": status}
     except Exception as e:
-        log.error(f"check_payment failed: {e}")
+        log.error(f"check_payment error: {e}")
         return {"paid": False, "status": "error"}
+
+
+# ============================================================
+# 4b) KHQR CARD GENERATOR — branded "Kairozen TopUp" card
+#     (ចម្លងពី phanna_premium_bot_V6_premium.py — design ដដែល)
+# ============================================================
+
+_CARD_NAVY      = (13, 18, 38)        # deep base
+_CARD_NAVY2     = (30, 27, 75)        # indigo — gradient end
+_CARD_RED       = (229, 29, 39)
+_CARD_WHITE     = (255, 255, 255)
+_CARD_SUBTITLE  = (191, 196, 234)
+_CARD_GRAY      = (104, 110, 128)
+_CARD_MUTED     = (139, 140, 144)
+_CARD_GOLD      = (245, 197, 66)
+_CARD_VIOLET    = (124, 92, 255)      # accent for corner brackets / glow
+_CARD_PANEL     = (250, 250, 252)     # QR glass-panel background
+
+_FONT_REG = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/system/fonts/Roboto-Regular.ttf",
+    "/data/data/com.termux/files/usr/share/fonts/DejaVuSans.ttf",
+]
+_FONT_BOLD = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/system/fonts/Roboto-Bold.ttf",
+    "/data/data/com.termux/files/usr/share/fonts/DejaVuSans-Bold.ttf",
+]
+
+
+def _card_font(size, bold=False):
+    for path in (_FONT_BOLD if bold else _FONT_REG):
+        try:
+            return ImageFont.truetype(path, size)
+        except (OSError, IOError):
+            continue
+    return ImageFont.load_default(size=size)
+
+
+def _tw(draw, text, font):
+    return draw.textbbox((0, 0), text, font=font)[2]
+
+
+def _cx_text(draw, cx, y, text, font, fill):
+    draw.text((cx - _tw(draw, text, font) / 2, y), text, font=font, fill=fill)
+
+
+def _vgrad(draw, box, top_color, bottom_color):
+    """គូរ gradient បញ្ឈរក្នុង box=[x0,y0,x1,y1]"""
+    x0, y0, x1, y1 = box
+    h = max(1, y1 - y0)
+    for i in range(h):
+        t = i / h
+        r = int(top_color[0] + (bottom_color[0] - top_color[0]) * t)
+        g = int(top_color[1] + (bottom_color[1] - top_color[1]) * t)
+        b = int(top_color[2] + (bottom_color[2] - top_color[2]) * t)
+        draw.line([(x0, y0 + i), (x1, y0 + i)], fill=(r, g, b))
+
+
+def _qr_matrix(data):
+    import qrcode as _qrcode
+    qr = _qrcode.QRCode(border=0, error_correction=_qrcode.constants.ERROR_CORRECT_M)
+    qr.add_data(data)
+    qr.make(fit=True)
+    m = qr.get_matrix()
+    return np.array([[0 if c else 255 for c in row] for row in m], dtype=np.uint8)
+
+
+def _qr_img(data, box_px):
+    matrix = _qr_matrix(data)
+    n = matrix.shape[0]
+    mod = max(1, box_px // n)
+    img = Image.new("RGB", (mod * n, mod * n), _CARD_PANEL)
+    draw = ImageDraw.Draw(img)
+    for ry in range(n):
+        for rx in range(n):
+            if matrix[ry, rx] == 0:
+                x0, y0 = rx * mod, ry * mod
+                draw.rectangle([x0, y0, x0 + mod - 1, y0 + mod - 1], fill=_CARD_NAVY)
+    return img.resize((box_px, box_px), Image.LANCZOS)
+
+
+def build_qr_card(qr_string, amount_usd=None, ref=None, label=None, subtitle=None,
+                   expires_min=5, width=720):
+    """
+    បង្កើត Bakong-style branded KHQR card (PNG BytesIO) សម្រាប់ Kairozen TopUp។
+    label:     ចំណងជើងកណ្តាល (ឧ. ឈ្មោះហ្គេម) — default ទៅ STORE_NAME
+    subtitle:  បន្ទាត់តូចក្រោម label (ឧ. ឈ្មោះកញ្ចប់ "100 Diamonds")
+    Return BytesIO លើជោគជ័យ, None បើមានបញ្ហា (caller គួរ fallback ទៅ qr_string text)
+    """
+    try:
+        W = width
+        HEADER_H = int(W * 0.30)
+        SIDE_PAD = int(W * 0.13)
+        QR_BOX = W - 2 * SIDE_PAD
+        QR_PAD = int(QR_BOX * 0.09)
+        OVERLAP = int(W * 0.10)
+
+        f_title = _card_font(int(W * 0.052), bold=True)
+        f_sub = _card_font(int(W * 0.026))
+        f_name = _card_font(int(W * 0.042), bold=True)
+        f_label = _card_font(int(W * 0.024))
+        f_amt = _card_font(int(W * 0.062), bold=True)
+        f_small = _card_font(int(W * 0.0205))
+        f_badge = _card_font(int(W * 0.0195), bold=True)
+
+        qr_card_top = HEADER_H - OVERLAP
+        qr_card_bottom = qr_card_top + QR_BOX
+        content_top = qr_card_bottom + int(W * 0.05)
+
+        amt_h = int(f_amt.size * 1.5)
+        gap1, gap2 = int(W * 0.022), int(W * 0.035)
+        bottom_pad = int(W * 0.05)
+
+        H = (content_top
+             + int(W * 0.065) + int(W * 0.04)
+             + gap1 + amt_h + gap2
+             + int(W * 0.03) + int(W * 0.03) + int(W * 0.03) + int(W * 0.03)
+             + bottom_pad)
+
+        img = Image.new("RGB", (W, H), _CARD_WHITE)
+        draw = ImageDraw.Draw(img)
+        cx = W // 2
+        pad = int(W * 0.06)
+
+        # ១. Header gradient (navy → indigo)
+        _vgrad(draw, [0, 0, W, HEADER_H], _CARD_NAVY, _CARD_NAVY2)
+
+        ring_r = int(W * 0.32)
+        ring_cx, ring_cy = W - int(W * 0.05), int(W * 0.02)
+        draw.ellipse([ring_cx - ring_r, ring_cy - ring_r, ring_cx + ring_r, ring_cy + ring_r],
+                     outline=(255, 255, 255), width=1)
+
+        draw.text((pad, int(W * 0.045)), "KHQR", font=f_title, fill=_CARD_WHITE)
+        draw.text((pad, int(W * 0.045) + f_title.size + int(W * 0.010)),
+                  "Cambodian QR Payment · Bakong", font=f_sub, fill=_CARD_SUBTITLE)
+
+        badge_txt = "★ KAIROZEN"
+        bw = _tw(draw, badge_txt, f_badge)
+        bpad_x, bpad_y = int(W * 0.020), int(W * 0.011)
+        bx1 = W - pad
+        bx0 = bx1 - bw - bpad_x * 2
+        by0 = int(W * 0.045)
+        by1 = by0 + f_badge.size + bpad_y * 2
+        draw.rounded_rectangle([bx0, by0, bx1, by1], radius=(by1 - by0) // 2, fill=_CARD_GOLD)
+        draw.text((bx0 + bpad_x, by0 + bpad_y - int(W * 0.003)), badge_txt, font=f_badge, fill=_CARD_NAVY)
+
+        # ២. Glass QR panel
+        r = int(W * 0.045)
+        panel_box = [SIDE_PAD, qr_card_top, SIDE_PAD + QR_BOX, qr_card_bottom]
+        shadow_off = int(W * 0.012)
+        draw.rounded_rectangle(
+            [panel_box[0] + shadow_off, panel_box[1] + shadow_off,
+             panel_box[2] + shadow_off, panel_box[3] + shadow_off],
+            radius=r, fill=(225, 227, 235))
+        draw.rounded_rectangle(panel_box, radius=r, fill=_CARD_WHITE)
+
+        qr_px = QR_BOX - 2 * QR_PAD
+        qr_pil = _qr_img(qr_string, qr_px)
+        img.paste(qr_pil, (SIDE_PAD + QR_PAD, qr_card_top + QR_PAD))
+
+        bl = int(W * 0.055)
+        bt = max(3, int(W * 0.007))
+        bo = int(W * 0.018)
+        x0, y0, x1, y1 = panel_box
+        corners = [
+            ((x0 + bo, y0 + bo + bl), (x0 + bo, y0 + bo), (x0 + bo + bl, y0 + bo)),
+            ((x1 - bo - bl, y0 + bo), (x1 - bo, y0 + bo), (x1 - bo, y0 + bo + bl)),
+            ((x0 + bo, y1 - bo - bl), (x0 + bo, y1 - bo), (x0 + bo + bl, y1 - bo)),
+            ((x1 - bo - bl, y1 - bo), (x1 - bo, y1 - bo), (x1 - bo, y1 - bo - bl)),
+        ]
+        for pts in corners:
+            draw.line(pts, fill=_CARD_VIOLET, width=bt, joint="curve")
+
+        # ៣. ឈ្មោះផលិតផល / ហាង
+        y = content_top
+        store_label = label or STORE_NAME
+        _cx_text(draw, cx, y, store_label, f_name, _CARD_NAVY)
+        y += int(W * 0.065)
+        _cx_text(draw, cx, y, subtitle or STORE_NAME, f_label, _CARD_GRAY)
+        y += int(W * 0.04) + gap1
+
+        # ៤. Amount banner (USD — ត្រូវនឹងចំនួនពិតដែល QR បានបង្កើត)
+        if amount_usd is not None:
+            amt_str = f"${float(amount_usd):.2f}"
+            banner_box = [pad, y, W - pad, y + amt_h]
+            draw.rounded_rectangle(banner_box, radius=int(W * 0.02), fill=(243, 241, 255))
+            draw.rounded_rectangle(banner_box, radius=int(W * 0.02), outline=_CARD_VIOLET, width=2)
+            _cx_text(draw, cx, y + (amt_h - f_amt.size) // 2 - int(W * 0.010),
+                     amt_str, f_amt, _CARD_NAVY2)
+            y += amt_h + gap2
+
+        # ៥. Ref / expiry / footer
+        if ref:
+            _cx_text(draw, cx, y, f"Ref: {ref}", f_small, _CARD_MUTED)
+            y += int(W * 0.03)
+        if expires_min:
+            _cx_text(draw, cx, y, f"Expires in {expires_min} minutes", f_small, _CARD_RED)
+            y += int(W * 0.03)
+        _cx_text(draw, cx, y, "Scan with any Bakong-member app", f_small, _CARD_MUTED)
+        y += int(W * 0.03)
+        _cx_text(draw, cx, y, "ABA · ACLEDA · Wing", f_small, _CARD_MUTED)
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        buf.seek(0)
+        buf.name = "khqr_card.png"
+        return buf
+
+    except Exception as e:
+        log.warning(f"build_qr_card failed, falling back to plain QR: {e}")
+        try:
+            import qrcode as _qrcode
+            qr = _qrcode.QRCode(box_size=8, border=2, error_correction=_qrcode.constants.ERROR_CORRECT_M)
+            qr.add_data(qr_string)
+            qr.make(fit=True)
+            pil = qr.make_image(fill_color=(10, 34, 64), back_color="white").convert("RGB")
+            buf = io.BytesIO()
+            pil.save(buf, format="PNG")
+            buf.seek(0)
+            buf.name = "khqr.png"
+            return buf
+        except Exception:
+            return None
 
 
 # ============================================================
@@ -357,24 +646,40 @@ def check_payment(order_id, md5=""):
 
 def submit_topup_to_bay2game(order: dict) -> dict:
     """
-    ហៅ Bay2Game.com API ដើម្បីធ្វើ Topup ពិតប្រាកដទៅគណនីហ្គេមរបស់អ្នកទិញ
-    TODO: កែ payload/response mapping ខាងក្រោមឲ្យត្រូវនឹង API spec ពិត
+    ហៅ GET /api/create_order ដើម្បីធ្វើ Topup ពិតប្រាកដទៅគណនីហ្គេមរបស់អ្នកទិញ។
+    Endpoint នេះឆ្លើយតបភ្លាមៗ (created_at == completed_at) — មិនចាំបាច់ poll status ដាច់ដោយឡែកទេ។
+
+    order["game_fields"] ជា dict {field_label: value} ដូចជា
+      {"User ID": "262856740", "Zone ID": "3543"} (MLBB)
+      {"Player ID": "123456789"} (Free Fire / PUBG Mobile)
+    តម្លៃទី 1 → game_user_id, តម្លៃទី 2 (បើមាន) → game_zone_id
+
     Return: {"success": bool, "reference": str, "error": str}
     """
+    field_values = list(order["game_fields"].values())
+    if not field_values:
+        return {"success": False, "reference": "", "error": "គ្មានទិន្នន័យគណនីហ្គេម"}
+
     url = f"{BAY2GAME_BASE_URL}{BAY2GAME_ORDER_ENDPOINT}"
-    headers = {"Authorization": f"Bearer {BAY2GAME_API_KEY}", "Content-Type": "application/json"}
-    payload = {
-        "game": order["game"],
-        "package_code": order["package_code"],
-        "target": order["game_fields"],
-        "reference_id": order["order_id"],
+    params = {
+        "api_key": BAY2GAME_API_KEY,
+        "product_code": order["package_code"],
+        "game_user_id": field_values[0],
+        "reference": order["order_id"],
     }
+    if len(field_values) > 1 and field_values[1]:
+        params["game_zone_id"] = field_values[1]
+
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=20)
+        resp = requests.get(url, params=params, headers={"Accept": "application/json"}, timeout=20)
         resp.raise_for_status()
         data = resp.json()
-        ok = data.get("status", "").lower() in ("success", "ok", "delivered", "processing")
-        return {"success": ok, "reference": data.get("reference", ""), "error": data.get("message", "")}
+        ok = data.get("status", "").upper() == "SUCCESS"
+        return {
+            "success": ok,
+            "reference": data.get("reference", order["order_id"]),
+            "error": "" if ok else data.get("message", "Unknown error"),
+        }
     except Exception as e:
         log.error(f"submit_topup_to_bay2game failed: {e}")
         return {"success": False, "reference": "", "error": str(e)}
@@ -555,7 +860,7 @@ def schedule_payment_polling(context: ContextTypes.DEFAULT_TYPE, order_id: str):
 
 
 async def send_game_menu(chat_id, context, edit_query=None):
-    icon_map = {"mlbb": "game", "ff": "fire", "pubgm": "helmet"}
+    icon_map = {"mlbb_exclusive": "game", "freefire_sgmy": "fire", "pubg_mobile": "helmet"}
     keyboard = [
         [styled_button(f"{g['emoji']} {g['name']}", f"game:{key}", icon_key=icon_map.get(key))]
         for key, g in GAMES.items()
@@ -573,7 +878,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"👋 សួស្តី {user.first_name}!\n\n"
-        "🎮 សូមស្វាគមន៍មកកាន់ *Diamond Topup Bot*\n"
+        f"🎮 សូមស្វាគមន៍មកកាន់ *{STORE_NAME}*\n"
         "ការទូទាត់ប្រាក់ និង Topup ត្រូវបានធ្វើដោយស្វ័យប្រវត្តិ! ⚡️",
         parse_mode=ParseMode.MARKDOWN,
         reply_markup=reply_keyboard_for(user.id),
@@ -700,20 +1005,30 @@ async def confirm_order(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ConversationHandler.END
 
-    update_order(order["order_id"], md5=qr.get("md5", ""))
+    amount_usd = qr.get("amount_usd")
+    expires_min = max(1, round((qr.get("expires_in") or PAYMENT_POLL_TIMEOUT_SECONDS) / 60))
 
     caption = (
         f"💳 *សូមស្កេន KHQR ខាងក្រោមដើម្បីទូទាត់ប្រាក់*\n\n"
         f"លេខការបញ្ជាទិញ៖ `{order['order_id']}`\n"
-        f"ចំនួនទឹកប្រាក់៖ *{pkg['price']:,.0f} ៛*\n\n"
+        f"ចំនួនទឹកប្រាក់៖ *{pkg['price']:,.0f} ៛* (≈ ${amount_usd:.2f})\n\n"
         "⚡️ ប្រព័ន្ធនឹងពិនិត្យ និង Topup ជូនអ្នកដោយស្វ័យប្រវត្តិភ្លាមៗ បន្ទាប់ពីទូទាត់ប្រាក់ចប់\n"
         "(មិនចាំបាច់ចុចអ្វីទៀតទេ គ្រាន់តែស្កេន ហើយរង់ចាំ)"
     )
     keyboard = [[styled_button("🔄 ពិនិត្យឥឡូវនេះ", f"check_pay:{order['order_id']}", style=BTN_STYLE_PRIMARY)]]
 
-    if qr.get("qr_image_url"):
+    card_buf = build_qr_card(
+        qr["qr_string"],
+        amount_usd=amount_usd,
+        ref=order["order_id"],
+        label=GAMES[game_key]["name"],
+        subtitle=pkg["label"],
+        expires_min=expires_min,
+    )
+
+    if card_buf:
         msg = await context.bot.send_photo(
-            chat_id=user_id, photo=qr["qr_image_url"], caption=caption,
+            chat_id=user_id, photo=card_buf, caption=caption,
             parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(keyboard),
         )
     else:

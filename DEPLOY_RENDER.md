@@ -16,11 +16,12 @@
 | Key | តម្លៃ |
 |---|---|
 | `BOT_TOKEN` | Token ពី @BotFather |
-| `BAY2GAME_BASE_URL` | https://bay2game.com/api |
-| `BAY2GAME_API_KEY` | API key ពិតរបស់ Bay2Game.com |
-| `CAMRAPID_BASE_URL` | URL API របស់ CamRapidPay |
-| `CAMRAPID_API_KEY` | API key របស់ CamRapidPay |
-| `CAMRAPID_MERCHANT_ID` | Merchant ID |
+| `BAY2GAME_BASE_URL` | https://api.bay2game.xyz/api |
+| `BAY2GAME_API_KEY` | API key ពិត — យកតាម Telegram [@Bay2GameBot](https://t.me/Bay2GameBot) ដោយវាយ `/profile` |
+| `USD_TO_KHR_RATE` | អត្រាប្តូររូបិយប័ណ្ណ USD→៛ (default 4100) សម្រាប់គណនាតម្លៃដើម |
+| `CAMRAPID_API_KEY` | API key ពិត — ស្នើតាម Telegram [@CamRapidSecureSupport](https://t.me/CamRapidSecureSupport) |
+| `CAMRAPID_CREATE_URL` | https://pay.camrapidpay.com/api/v1/khqr/create-payments |
+| `CAMRAPID_CHECK_URL` | https://pay.camrapidpay.com/check-transaction-api |
 | `PORT` | Render កំណត់ជូនស្វ័យប្រវត្តិ (មិនចាំបាច់ដាក់ដោយដៃ) |
 
 ⚠️ កុំភ្លេចកែ `ADMIN_IDS` ក្នុង `bot.py` ជា Telegram ID ពិតរបស់ Admin (deploy រួចមិនអាចប្តូរតាម env បានទេ លុះត្រាតែកែកូដ)។
