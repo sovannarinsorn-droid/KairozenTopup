@@ -49,7 +49,7 @@ log = logging.getLogger("topup_bot")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "PUT_YOUR_TELEGRAM_BOT_TOKEN_HERE")
 
 ADMIN_IDS = [
-    123456789,  # <-- ដូរជា Telegram user id របស់ Admin
+    8266854899,  # <-- ដូរជា Telegram user id របស់ Admin
 ]
 
 # --- Bay2Game.com (ប្រភពតម្លៃ Diamond + ការបញ្ជូន Topup) ---
