@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: diamond-topup-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: BAY2GAME_BASE_URL
+        value: https://bay2game.com/api
+      - key: BAY2GAME_API_KEY
+        sync: false
+      - key: CAMRAPID_BASE_URL
+        value: https://api.camrapidpay.com
+      - key: CAMRAPID_API_KEY
+        sync: false
+      - key: CAMRAPID_MERCHANT_ID
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9
