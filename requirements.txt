@@ -1,6 +1,0 @@
-python-telegram-bot[job-queue]==22.7
-requests
-flask
-qrcode
-pillow
-numpy
