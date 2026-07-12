@@ -3,12 +3,6 @@
 game_topup_bot.py — Kairozen Game Topup Bot
 Free Fire / Mobile Legends / PUBG Mobile
 Payment: CamRapidPay KHQR | Fulfillment: Bay2Game API
-
-Run (Termux/local):
-    pip install pyTelegramBotAPI requests
-    export BOT_TOKEN="xxxx"
-    export BAY2GAME_API_KEY="xxxx"
-    python game_topup_bot.py
 """
 import json
 import time
@@ -35,7 +29,6 @@ def reload_products():
     PRODUCTS = products_store.load()
 
 
-# in-memory conversation state: { chat_id: {step, game_key, package, player_id, server_id} }
 STATE = {}
 
 
@@ -43,10 +36,7 @@ def is_admin(user_id):
     return user_id in config.ADMIN_IDS
 
 
-# ---------- Menus ----------
-
 def main_reply_menu():
-    """Reply Keyboard (ប៊ូតុងជាប់ខាងក្រោមអេក្រង់) — ម៉ឺនុយចម្បង, ប្រើ Premium emoji បើមាន ID"""
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     kb.add(
         types.KeyboardButton(pe.label("topup", "ទិញ Topup"), **pe.button_kwargs("topup")),
@@ -59,7 +49,6 @@ def main_reply_menu():
 def games_menu():
     kb = types.InlineKeyboardMarkup(row_width=1)
     for key, g in PRODUCTS.items():
-        # game_key ដូចគ្នានឹង key ក្នុង premium_emoji.EMOJI_IDS (freefire/mobilelegends/pubgm)
         kb.add(types.InlineKeyboardButton(
             pe.label(key, g["name"]),
             callback_data=f"game:{key}",
@@ -102,8 +91,6 @@ def get_package(game_key, pkg_code):
             return pkg
     return None
 
-
-# ---------- /start ----------
 
 @bot.message_handler(commands=["start", "help"])
 def cmd_start(message):
@@ -177,8 +164,6 @@ def cmd_stats(message):
         f"📊 <b>Admin Stats</b>\nOrders សរុប: {total}\nបានទូទាត់: {paid}\nចំណូលសរុប: ${revenue:.2f}"
     )
 
-
-# ---------- Callback flow ----------
 
 @bot.callback_query_handler(func=lambda c: c.data.startswith("game:"))
 def cb_game(call):
@@ -297,10 +282,25 @@ def cb_confirm(call):
             "❌ មិនអាចបង្កើត KHQR បានទេ សូមព្យាយាមម្តងទៀត ឬទាក់ទង admin។",
             chat_id, call.message.message_id
         )
+        err_detail = (
+            f"⚠️ KHQR creation FAILED\n"
+            f"order_id: {order_id}\n"
+            f"status_code: {khqr.get('status_code')}\n"
+            f"error: {khqr.get('error')}\n"
+            f"raw: {khqr.get('raw')}"
+        )
+        for admin_id in config.ADMIN_IDS:
+            try:
+                bot.send_message(admin_id, err_detail)
+            except Exception:
+                pass
         return
 
-    qr_image_url = khqr["raw"].get("qr_image_url") or khqr["raw"].get("qr_url")
-    qr_text = khqr["raw"].get("qr_string") or khqr["raw"].get("qr")
+    qr_string = khqr.get("qr_code", "")
+    qr_image_url = (
+        f"https://api.qrserver.com/v1/create-qr-code/?size=350x350&data={qr_string}"
+        if qr_string else None
+    )
 
     kb = types.InlineKeyboardMarkup()
     kb.add(types.InlineKeyboardButton(
@@ -320,11 +320,10 @@ def cb_confirm(call):
     if qr_image_url:
         bot.send_photo(chat_id, qr_image_url, caption=caption, reply_markup=kb)
     else:
-        bot.send_message(chat_id, f"{caption}\n\n<code>{qr_text}</code>", reply_markup=kb)
+        bot.send_message(chat_id, f"{caption}\n\n<code>{qr_string}</code>", reply_markup=kb)
 
     bot.delete_message(chat_id, call.message.message_id)
 
-    # ជូនដំណឹង admin
     for admin_id in config.ADMIN_IDS:
         try:
             bot.send_message(
